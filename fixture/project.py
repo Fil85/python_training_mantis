@@ -46,10 +46,15 @@ class ProjectHelper:
             wd = self.app.wd
             self.open_projects_page()
             self.project_cache = []
-            for element in wd.find_elements_by_css_selector("span.group"):
-                text = element.text
-                id = element.find_element_by_name("selected[]").get_attribute("value")
-                self.project_cache.append(Project(name=text, id=id))
+            i = 1
+            for row in wd.find_elements_by_class_name("row-%i" % i):
+                cells = row.find_elements_by_tag_name("td")
+                name = cells[0].text
+                status = cells[1].text
+                view_state = cells[3].text
+                description = cells[4].text
+                self.project_cache.append(Project(name=name, status=status, view_state=view_state, description=description))
+                i += 1
         return list(self.project_cache)
 
     project_cache = None
