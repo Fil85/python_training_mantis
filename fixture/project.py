@@ -7,18 +7,18 @@ class ProjectHelper:
     def __init__(self, app):
         self.app = app
 
-    def create(self, project):
+    def add_project(self, project):
         wd = self.app.wd
-        self.open_projects_page()
+        self.open_new_project_form()
         self.fill_project_form(project)
         wd.find_element_by_xpath("//input[@value='Add Project']").click()
 
-    def open_projects_page(self):
+    def open_new_project_form(self):
         wd = self.app.wd
         if not (len(wd.find_elements_by_name("description")) > 0):
             wd.find_element_by_link_text("Manage").click()
             wd.find_element_by_link_text("Manage Projects").click()
-            wd.find_element_by_link_text("Create New Project").click()
+            wd.find_element_by_xpath("//input[@value='Create New Project']").click()
 
     def fill_project_form(self, project):
         self.change_field_value("name", project.name)
