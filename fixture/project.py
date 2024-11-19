@@ -1,8 +1,13 @@
 import string
 import random
-
 from selenium.webdriver.support.ui import Select
 from model.project import Project
+
+
+def random_string():
+    maxlen = 20
+    symbols = string.ascii_letters + string.digits
+    return "project_" + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
 class ProjectHelper:
@@ -71,9 +76,12 @@ class ProjectHelper:
                 i += 1
         return list(self.project_cache)
 
-    def random_string(self):
-        maxlen = 20
-        symbols = string.ascii_letters + string.digits
-        return "project_" + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
-
     project_cache = None
+
+    def del_project(self, name):
+        wd = self.app.wd
+        self.open_projects_page()
+        wd.find_element_by_link_text(name).click()
+        wd.find_element_by_xpath("//input[@value='Delete Project']").click()
+        wd.find_element_by_xpath("//input[@value='Delete Project']").click()
+        self.project_cache = None
