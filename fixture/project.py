@@ -1,3 +1,6 @@
+import string
+import random
+
 from selenium.webdriver.support.ui import Select
 from model.project import Project
 
@@ -13,6 +16,7 @@ class ProjectHelper:
         self.open_new_project_form()
         self.fill_project_form(project)
         wd.find_element_by_xpath("//input[@value='Add Project']").click()
+        self.project_cache = None
 
     def open_new_project_form(self):
         wd = self.app.wd
@@ -46,15 +50,30 @@ class ProjectHelper:
             wd = self.app.wd
             self.open_projects_page()
             self.project_cache = []
-            i = 1
+            for row in wd.find_elements_by_class_name("row-1"):
+                cells = row.find_elements_by_tag_name("td")
+                name = cells[0].text
+                status = cells[1].text
+                if status != "":
+                    view_state = cells[3].text
+                    description = cells[4].text
+                    self.project_cache.append(Project(name=name, status=status, view_state=view_state, description=description))
+            i = 2
             for row in wd.find_elements_by_class_name("row-%i" % i):
                 cells = row.find_elements_by_tag_name("td")
                 name = cells[0].text
                 status = cells[1].text
-                view_state = cells[3].text
-                description = cells[4].text
-                self.project_cache.append(Project(name=name, status=status, view_state=view_state, description=description))
+                if status != "":
+                    view_state = cells[3].text
+                    description = cells[4].text
+                    self.project_cache.append(
+                        Project(name=name, status=status, view_state=view_state, description=description))
                 i += 1
         return list(self.project_cache)
+
+    def random_string(self):
+        maxlen = 20
+        symbols = string.ascii_letters + string.digits
+        return "project_" + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
     project_cache = None

@@ -13,3 +13,6 @@ class Project:
     def __eq__(self, other):
         return self.name == other.name
 
+    def name_sort(self):
+        if self.name:
+            return self.name
