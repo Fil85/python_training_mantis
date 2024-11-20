@@ -16,6 +16,10 @@ def load_config(file):
             target = json.load(f)
     return target
 
+@pytest.fixture
+def config(request):
+    return load_config(request.config.getoption("--target"))
+
 
 @pytest.fixture
 def app(request, config):
