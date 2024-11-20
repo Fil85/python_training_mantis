@@ -46,4 +46,4 @@ class JamesHelper:
             self.read_until("Password for %s reset" % username)
 
         def quit(self):
-            self.telnet.write("quit\n")
+            self.write("quit\n")
