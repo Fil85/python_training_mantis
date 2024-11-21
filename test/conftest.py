@@ -3,7 +3,6 @@ import json
 import os.path
 from fixture.application import Application
 
-
 fixture = None
 target = None
 
@@ -16,6 +15,7 @@ def load_config(file):
             target = json.load(f)
     return target
 
+
 @pytest.fixture
 def config(request):
     return load_config(request.config.getoption("--target"))
@@ -27,6 +27,7 @@ def app(request, config):
     browser = request.config.getoption("--browser")
     if fixture is None or not fixture.is_valid():
         fixture = Application(browser=browser, config=config)
+    fixture.session.ensure_login(username=config["webadmin"]["username"], password=config["webadmin"]["password"])
     return fixture
 
 
