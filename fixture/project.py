@@ -56,9 +56,9 @@ class ProjectHelper:
                 if status != "":
                     view_state = cells[3].text
                     description = cells[4].text
-                    self.project_cache.append(Project(name=name, status=status, view_state=view_state, description=description))
-            i = 2
-            for row in wd.find_elements_by_class_name("row-%i" % i):
+                    self.project_cache.append(
+                        Project(name=name, status=status, view_state=view_state, description=description))
+            for row in wd.find_elements_by_class_name("row-2"):
                 cells = row.find_elements_by_tag_name("td")
                 name = cells[0].text
                 status = cells[1].text
@@ -67,7 +67,6 @@ class ProjectHelper:
                     description = cells[4].text
                     self.project_cache.append(
                         Project(name=name, status=status, view_state=view_state, description=description))
-                i += 1
         return list(self.project_cache)
 
     project_cache = None
