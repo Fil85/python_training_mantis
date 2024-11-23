@@ -8,3 +8,15 @@ def test_add_project(app):
     old_projects.append(project_test)
     new_projects = app.project.get_project_list()
     assert sorted(old_projects, key=Project.name_sort) == sorted(new_projects, key=Project.name_sort)
+
+
+def test_add_project_soap(app):
+    username = app.config["webadmin"]["username"]
+    password = app.config["webadmin"]["password"]
+    old_projects = app.soap.get_project_list_soap(username, password)
+    project_test = Project(name=app.project.random_string(), description=app.project.random_string())
+    app.project.add_project(project_test)
+    new_projects = app.soap.get_project_list_soap(username, password)
+    project_soap = new_projects[-1]
+    old_projects.append(project_soap)
+    assert old_projects == new_projects
