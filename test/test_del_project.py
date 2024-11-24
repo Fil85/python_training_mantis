@@ -23,12 +23,12 @@ def test_del_project_soap(app):
     old_projects_soap = app.soap.get_project_list_soap(username, password)
     old_projects = []
     for project in old_projects_soap:
-        old_projects.append(project.name)
-    project_name = random.choice(old_projects)
-    app.project.del_project(project_name)
-    old_projects.remove(project_name)
+        old_projects.append(Project(id = project.id, name=project.name))
+    project = random.choice(old_projects)
+    app.project.del_project(project.name)
+    old_projects.remove(project)
     new_projects_soap = app.soap.get_project_list_soap(username, password)
     new_projects = []
     for project in new_projects_soap:
-        new_projects.append(project.name)
-    assert sorted(old_projects) == sorted(new_projects)
+        new_projects.append(Project(id = project.id, name=project.name))
+    assert sorted(old_projects, key=Project.name_sort) == sorted(new_projects, key=Project.name_sort)
